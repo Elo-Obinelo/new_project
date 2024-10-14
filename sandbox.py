@@ -1,8 +1,6 @@
 from dash import Dash, html, dcc, Input, Output, State, clientside_callback
 import dash_bootstrap_components as dbc
 from datetime import date, timedelta
-
-import pandas as pd
 import sqlite3
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME], prevent_initial_callbacks= False)
@@ -134,8 +132,16 @@ def update_output(date_now, market_area, resolution):
             SELECT * FROM {market_area} WHERE  Date == '{date_string}' AND Resolution = '{res}'
         ''')
         headers = [i[0] for i in cursor.description]
-        df = pd.DataFrame.from_records(cursor.fetchall(), columns=headers).iloc[:,1:-1]
-        table = dbc.Table(id= 'my_table').from_dataframe(df, striped=True, bordered=True, hover=True)
+        corpus = cursor.fetchall()
+        # df = pd.DataFrame.from_records(cursor.fetchall(), columns=headers).iloc[:,1:-1]
+        # table = dbc.Table(id= 'my_table').from_dataframe(df, striped=True, bordered=True, hover=True)
+        table_header = [
+            html.Thead(html.Tr([html.Th(header) for header in headers]))
+        ]
+        table_body = [
+            html.Tbody([html.Tr([html.Td(value) for value in row]) for row in corpus])
+            ]
+        table = dbc.Table(table_header + table_body, bordered=True, striped=True, hover=True)
         cursor.close()
         conn.close()
         return table
