@@ -4,6 +4,7 @@ from datetime import date, timedelta
 import sqlite3
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME], prevent_initial_callbacks= False)
+server = app.server
 # conn = sqlite3.Connection("new_project/stash1.db")
 # cursor = conn.cursor()
 
@@ -126,7 +127,7 @@ def update_output(date_now, market_area, resolution):
         else:
             res = 'res3'
 
-        conn = sqlite3.connect("new_project/stash1.db")
+        conn = sqlite3.connect("src/stash1.db")
         cursor = conn.cursor()
         cursor.execute(f'''
             SELECT * FROM {market_area} WHERE  Date == '{date_string}' AND Resolution = '{res}'
@@ -136,10 +137,10 @@ def update_output(date_now, market_area, resolution):
         # df = pd.DataFrame.from_records(cursor.fetchall(), columns=headers).iloc[:,1:-1]
         # table = dbc.Table(id= 'my_table').from_dataframe(df, striped=True, bordered=True, hover=True)
         table_header = [
-            html.Thead(html.Tr([html.Th(header) for header in headers]))
+            html.Thead(html.Tr([html.Th(header) for header in headers][:-1]))
         ]
         table_body = [
-            html.Tbody([html.Tr([html.Td(value) for value in row]) for row in corpus])
+            html.Tbody([html.Tr([html.Td(value) for value in row][:-1]) for row in corpus])
             ]
         table = dbc.Table(table_header + table_body, bordered=True, striped=True, hover=True)
         cursor.close()

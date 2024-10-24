@@ -60,7 +60,7 @@ def daily_fetch(params):
 
 
 def create_database(headers, body, area):
-    conn = sqlite3.connect("new_project/stash1.db")
+    conn = sqlite3.connect("src/stash1.db")
     cursor = conn.cursor()
     cursor.execute(f'''
         CREATE TABLE IF NOT EXISTS {area} (
