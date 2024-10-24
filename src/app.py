@@ -5,9 +5,6 @@ import sqlite3
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME], prevent_initial_callbacks= False)
 server = app.server
-# conn = sqlite3.Connection("new_project/stash1.db")
-# cursor = conn.cursor()
-
 
 market_picker = html.Div([
     dcc.RadioItems(
